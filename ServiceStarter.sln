@@ -3,7 +3,25 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26430.16
 MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceStarter", "ServiceStarter\ServiceStarter.csproj", "{D5E7BC77-5C86-4248-8D60-F45851424BB2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceStarterTests", "ServiceStarterTests\ServiceStarterTests.csproj", "{A40F18EC-40CC-4AAB-A5F1-D87E38F11EA8}"
+EndProject
 Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D5E7BC77-5C86-4248-8D60-F45851424BB2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D5E7BC77-5C86-4248-8D60-F45851424BB2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D5E7BC77-5C86-4248-8D60-F45851424BB2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D5E7BC77-5C86-4248-8D60-F45851424BB2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A40F18EC-40CC-4AAB-A5F1-D87E38F11EA8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A40F18EC-40CC-4AAB-A5F1-D87E38F11EA8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A40F18EC-40CC-4AAB-A5F1-D87E38F11EA8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A40F18EC-40CC-4AAB-A5F1-D87E38F11EA8}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
