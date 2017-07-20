@@ -1,9 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.ServiceProcess;
+using System.Text.RegularExpressions;
+using System.Windows;
 
 namespace ServiceStarter.Models
 {
-    class WindowsServiceProvider : IWindowsServiceProvider
+    public class WindowsServiceProvider : IWindowsServiceProvider
     {
         private List<IWindowsService> _list;
 
@@ -19,14 +21,31 @@ namespace ServiceStarter.Models
 
             foreach (ServiceController scTemp in scServices)
             {
-                //TODO: use it as input parameters
-                if (scTemp.ServiceName == "MSSQL$SQLTEC" || scTemp.ServiceName == "SQLBrowser")
+                Match match = Regex.Match(scTemp.ServiceName, @"MSSQL\$");
+                if (match.Success || scTemp.ServiceName == "SQLBrowser")
                 {
-                    _list.Add(new WindowsService(scTemp));
+                    var tmpServiceController = new ServiceController(scTemp.ServiceName);
+                    var wrapper = new ServiceControllerWrapper(tmpServiceController);
+                    _list.Add(new WindowsService(wrapper));
                 }
             }
 
+            if (_list.Count != 2)
+                ShutdownIfNoServicesFound();
+
             return _list;
         }
-    }
+        private void ShutdownIfNoServicesFound()
+        {
+            MessageBoxResult boxResult = MessageBox.
+                Show("Es wurden keine SQL Server Instanzen gefunden. Bitte in der 'ServiceStarter.exe.config' pflegen",
+                "SQL Server nicht gefunden",
+                MessageBoxButton.OK,
+                MessageBoxImage.Error);
+
+            if (boxResult == MessageBoxResult.OK)
+                Application.Current.Shutdown();
+
+        }
+    }    
 }

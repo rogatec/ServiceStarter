@@ -4,7 +4,7 @@ using System.Windows.Input;
 
 namespace ServiceStarter.ViewModels
 {
-    class ServicesViewModel : IServicesVieModel
+    public class ServicesViewModel : IServicesViewModel
     {
         public ServicesViewModel()
         {

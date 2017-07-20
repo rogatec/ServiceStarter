@@ -2,7 +2,7 @@
 
 namespace ServiceStarter.Models
 {
-    interface IWindowsServiceProvider
+    public interface IWindowsServiceProvider
     {
         List<IWindowsService> GetSQLServices();
     }

@@ -1,27 +1,35 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using ServiceStarter.Models;
-using System;
+﻿using NUnit.Framework;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ServiceStarter.Models.Tests
 {
-    // TODO: IMPLEMENT
-    [TestClass()]
+    [TestFixture]
     public class WindowsServiceProviderTests
     {
-        [TestMethod()]
-        public void WindowsServiceProviderTest()
+        private WindowsServiceProvider serviceProvider;
+
+        [SetUp]
+        public void SetUp()
         {
-            Assert.Fail();
+            serviceProvider = new WindowsServiceProvider();
         }
 
-        [TestMethod()]
-        public void GetSQLServicesTest()
+        [Test]
+        public void WindowsServiceProviderTest()
         {
-            Assert.Fail();
+            Assert.IsInstanceOf<IWindowsServiceProvider>(serviceProvider);
+        }
+
+        [Test]
+        public void GetSQLServices_ProviderIsInstantiated_ReturnsListOfIWindowsServices()
+        {
+            Assert.IsInstanceOf<List<IWindowsService>>(serviceProvider.GetSQLServices());
+        }
+
+        [Test]
+        public void GETSQLServices_ProvidedIsInstantiated_ListCountIsTwo()
+        {
+            Assert.AreEqual(2, serviceProvider.GetSQLServices().Count);
         }
     }
 }

@@ -1,40 +1,40 @@
-﻿using System;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.ServiceProcess;
 
 namespace ServiceStarter.Models
 {
     public class WindowsService : IWindowsService, INotifyPropertyChanged
     {
-        public ServiceControllerStatus CurrentStatus { get; private set; }
-        
-        public string DisplayName { get; private set; }
+        IServiceControllerWrapper _serviceWrapper;
 
-        public string ServiceName { get; private set; }
+        public string ServiceName { get { return _serviceWrapper.ServiceName; } }
 
-        public ServiceController Service { get; private set; }
+        public string DisplayName { get { return _serviceWrapper.DisplayName; } }
 
-        public WindowsService(ServiceController service)
+        public ServiceControllerStatus CurrentStatus
         {
-            Service = new ServiceController(service.ServiceName);
-            DisplayName = Service.DisplayName;
-            ServiceName = Service.ServiceName;
-            CurrentStatus = Service.Status;
+            get { return _serviceWrapper.Status; } private set { }
+        }
+        public WindowsService(IServiceControllerWrapper serviceWrapper)
+        {
+            _serviceWrapper = serviceWrapper;
+            CurrentStatus = _serviceWrapper.Status;
         }
 
+        public IServiceControllerWrapper Controller { get { return _serviceWrapper; } }
+        
         public void HandleStatus()
         {
-            var timeout = TimeSpan.FromSeconds(10);
-            if (Service.Status == ServiceControllerStatus.Stopped)
+            if (_serviceWrapper.Status == ServiceControllerStatus.Stopped)
             {
-                Service.Start();
-                Service.WaitForStatus(ServiceControllerStatus.Running, timeout);
-            } else if (Service.Status == ServiceControllerStatus.Running)
+                _serviceWrapper.StartService();
+                _serviceWrapper.StatusWait(ServiceControllerStatus.Running);
+            } else if (_serviceWrapper.Status == ServiceControllerStatus.Running)
             {
-                Service.Stop();
-                Service.WaitForStatus(ServiceControllerStatus.Stopped, timeout);
+                _serviceWrapper.StopService();
+                _serviceWrapper.StatusWait(ServiceControllerStatus.Stopped);
             }
-            CurrentStatus = Service.Status;
+            CurrentStatus = _serviceWrapper.Status == ServiceControllerStatus.Running ? ServiceControllerStatus.Running : ServiceControllerStatus.Stopped;
             RaisePropertyChanged("CurrentStatus");
         }
 

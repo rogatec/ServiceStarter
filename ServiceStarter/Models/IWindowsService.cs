@@ -2,15 +2,15 @@
 
 namespace ServiceStarter.Models
 {
-    interface IWindowsService
+    public interface IWindowsService
     {
-        ServiceControllerStatus CurrentStatus { get; }
-
-        string DisplayName { get; }
+        IServiceControllerWrapper Controller { get; }
 
         string ServiceName { get; }
 
-        ServiceController Service { get; }
+        string DisplayName { get; }
+
+        ServiceControllerStatus CurrentStatus { get; }
 
         void HandleStatus();
     }

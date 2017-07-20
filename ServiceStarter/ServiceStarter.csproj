@@ -86,6 +86,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Models\IServiceControllerWrapper.cs" />
+    <Compile Include="Models\ServiceControllerWrapper.cs" />
     <Compile Include="ViewModelBase\DefaultViewModelResolver.cs" />
     <Compile Include="ViewModelBase\IViewModelResolver.cs" />
     <Compile Include="ViewModelBase\SimpleViewModelResolver.cs" />
@@ -106,7 +108,7 @@
     <Compile Include="Models\IWindowsServiceProvider.cs" />
     <Compile Include="Models\WindowsService.cs" />
     <Compile Include="Models\WindowsServiceProvider.cs" />
-    <Compile Include="ViewModels\IServicesVieModel.cs" />
+    <Compile Include="ViewModels\IServicesViewModel.cs" />
     <Compile Include="ViewModels\ServicesViewModel.cs" />
     <Compile Include="Views\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
