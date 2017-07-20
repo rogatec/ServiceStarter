@@ -16,25 +16,29 @@ namespace ServiceStarter.Models
             if (_list != null) return _list;
 
             _list = new List<IWindowsService>();
-            ServiceController[] scServices;
-            scServices = ServiceController.GetServices();
-
-            foreach (ServiceController scTemp in scServices)
-            {
-                Match match = Regex.Match(scTemp.ServiceName, @"MSSQL\$");
-                if (match.Success || scTemp.ServiceName == "SQLBrowser")
-                {
-                    var tmpServiceController = new ServiceController(scTemp.ServiceName);
-                    var wrapper = new ServiceControllerWrapper(tmpServiceController);
-                    _list.Add(new WindowsService(wrapper));
-                }
-            }
+            AddServices();
 
             if (_list.Count != 2)
                 ShutdownIfNoServicesFound();
 
             return _list;
         }
+
+        private void AddServices()
+        {
+            ServiceController[] scServices = ServiceController.GetServices();
+
+            foreach (ServiceController scTemp in scServices)
+            {
+                Match match = Regex.Match(scTemp.ServiceName, @"MSSQL\$");
+                if (match.Success || scTemp.ServiceName == "SQLBrowser")
+                {
+                    var wrapper = new ServiceControllerWrapper(new ServiceController(scTemp.ServiceName));
+                    _list.Add(new WindowsService(wrapper));
+                }
+            }
+        }
+
         private void ShutdownIfNoServicesFound()
         {
             MessageBoxResult boxResult = MessageBox.
