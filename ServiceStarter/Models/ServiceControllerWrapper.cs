@@ -1,34 +1,31 @@
 ﻿using System;
 using System.ServiceProcess;
 
-namespace ServiceStarter.Models
-{
-    class ServiceControllerWrapper : IServiceControllerWrapper
-    {
-        private ServiceController _serviceController;
-        public ServiceControllerWrapper(ServiceController serviceController)
-        {
+namespace ServiceStarter.Models {
+    internal class ServiceControllerWrapper : IServiceControllerWrapper {
+        private readonly ServiceController _serviceController;
+
+        public ServiceControllerWrapper(ServiceController serviceController) {
             _serviceController = serviceController;
         }
-        public string ServiceName { get { return _serviceController.ServiceName;  } }
 
-        public string DisplayName { get { return _serviceController.DisplayName; } }
+        public string ServiceName => _serviceController.ServiceName;
 
-        public ServiceControllerStatus Status { get { return _serviceController.Status; } }
-        public void StatusWait(ServiceControllerStatus serviceStatus)
-        {
+        public string DisplayName => _serviceController.DisplayName;
+
+        public ServiceControllerStatus Status => _serviceController.Status;
+
+        public void StatusWait(ServiceControllerStatus serviceStatus) {
             var timeout = TimeSpan.FromSeconds(10);
 
             _serviceController.WaitForStatus(serviceStatus, timeout);
         }
 
-        public void StartService()
-        {
+        public void StartService() {
             _serviceController.Start();
         }
 
-        public void StopService()
-        {
+        public void StopService() {
             _serviceController.Stop();
         }
     }

@@ -1,49 +1,42 @@
-﻿using NUnit.Framework;
-using System.Collections.ObjectModel;
-using ServiceStarter.Models;
+﻿using System.Collections.ObjectModel;
 using System.Windows.Input;
+using NUnit.Framework;
+using ServiceStarter.Models;
+using ServiceStarter.ViewModels;
 
-namespace ServiceStarter.ViewModels.Tests
-{
+namespace ServiceStarterTests.ViewModels {
     [TestFixture]
-    public class ServicesViewModelTests
-    {
-        private ServicesViewModel viewModel;
+    public class ServicesViewModelTests {
+        private ServicesViewModel _viewModel;
 
         [SetUp]
-        protected void SetUp()
-        {
-            viewModel = new ServicesViewModel();
+        protected void SetUp() {
+            _viewModel = new ServicesViewModel();
         }
 
         [Test]
-        public void GetServices_ViewModelIsInstantiated_ReturnsInstanceOfObservableCollection()
-        {
-            Assert.IsInstanceOf<ObservableCollection<IWindowsService>>(viewModel.Services);
+        public void GetServices_ViewModelIsInstantiated_ReturnsInstanceOfObservableCollection() {
+            Assert.IsInstanceOf<ObservableCollection<IWindowsService>>(_viewModel.Services);
         }
 
         [Test]
-        public void GetServices_ViewModelIsInstantiated_NotNull()
-        {
-            Assert.IsNotNull(viewModel.Services);
+        public void GetServices_ViewModelIsInstantiated_NotNull() {
+            Assert.IsNotNull(_viewModel.Services);
         }
 
         [Test]
-        public void GetServices_CollectionCount_IsTwo()
-        {
-            Assert.AreEqual(2, viewModel.Services.Count);
+        public void GetServices_CollectionCount_IsTwo() {
+            Assert.That(2, Is.EqualTo(_viewModel.Services.Count));
         }
 
         [Test]
-        public void GetStartStopCommand_ViewModelIsInstantiated_InstanceOfICommand()
-        {
-            Assert.IsInstanceOf<ICommand>(viewModel.StartStop);            
+        public void GetStartStopCommand_ViewModelIsInstantiated_InstanceOfICommand() {
+            Assert.IsInstanceOf<ICommand>(_viewModel.StartStop);
         }
 
         [Test]
-        public void GetStartStopCommand_ViewModelIsInstantiated_NotNull()
-        {
-            Assert.IsNotNull(viewModel.StartStop);
+        public void GetStartStopCommand_ViewModelIsInstantiated_NotNull() {
+            Assert.IsNotNull(_viewModel.StartStop);
         }
     }
 }

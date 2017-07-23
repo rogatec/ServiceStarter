@@ -2,13 +2,11 @@
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 
-namespace ServiceStarter.ViewModels
-{
-    public interface IServicesViewModel
-    {
+namespace ServiceStarter.ViewModels {
+    public interface IServicesViewModel {
         ObservableCollection<IWindowsService> Services { get; }
 
-        IWindowsService SelectedService { get; set; }
+        IWindowsService SelectedService { set; }
 
         ICommand StartStop { get; }
     }

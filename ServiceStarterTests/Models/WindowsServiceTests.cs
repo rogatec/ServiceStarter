@@ -1,80 +1,71 @@
-﻿using NUnit.Framework;
-using Moq;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ServiceProcess;
+using Moq;
+using NUnit.Framework;
+using ServiceStarter.Models;
 
-namespace ServiceStarter.Models.Tests
-{
+namespace ServiceStarterTests.Models {
     [TestFixture]
-    public class WindowsServiceTests
-    {
-        private Mock<IServiceControllerWrapper> serviceMock;
-        private WindowsService windowsService;
+    public class WindowsServiceTests {
+        private Mock<IServiceControllerWrapper> _serviceMock;
+        private WindowsService _windowsService;
 
         [OneTimeSetUp]
-        public void OneTimeSetUp()
-        {
-            serviceMock = new Mock<IServiceControllerWrapper>();
-            serviceMock.Setup(s => s.ServiceName).Returns("MSSQL$SQLTEC");
-            serviceMock.Setup(s => s.DisplayName).Returns("SQLTEC");
+        public void OneTimeSetUp() {
+            // TODO: we need service mock
+            _serviceMock = new Mock<IServiceControllerWrapper>();
+            _serviceMock.Setup(s => s.ServiceName).Returns("MSSQL$SQLTEC");
+            _serviceMock.Setup(s => s.DisplayName).Returns("SQLTEC");
         }
 
         [SetUp]
-        public void Setup()
-        {
-            windowsService = new WindowsService(serviceMock.Object);
+        public void Setup() {
+            _windowsService = new WindowsService(_serviceMock.Object);
         }
 
         [Test]
-        public void Constructor_ParamIsServiceController_DisplayNamePropertyNotNull()
-        {
-            Assert.IsNotNull(windowsService.DisplayName);
+        public void Constructor_ParamIsServiceController_DisplayNamePropertyNotNull() {
+            Assert.IsNotNull(_windowsService.DisplayName);
         }
 
         [Test]
-        public void Constructor_ParamIsDisplayName_DisplayName()
-        {
-            Assert.AreEqual("SQLTEC", windowsService.DisplayName);
+        public void Constructor_ParamIsDisplayName_DisplayName() {
+            Assert.That(_windowsService.DisplayName, Is.EqualTo("SQLTEC"));
         }
 
         [Test]
-        public void Constructor_ParamIsServiceName_ServiceName()
-        {
-            Assert.AreEqual("MSSQL$SQLTEC", windowsService.ServiceName);
+        public void Constructor_ParamIsServiceName_ServiceName() {
+            Assert.That(_windowsService.ServiceName, Is.EqualTo("MSSQL$SQLTEC"));
         }
 
         [Test]
-        public void Constructor_ParamIsStatus_GetStatus()
-        {
-            serviceMock.Setup(s => s.Status).Returns(ServiceControllerStatus.Stopped);
-            var stoppedService = new WindowsService(serviceMock.Object);
+        public void Constructor_ParamIsStatus_GetStatus() {
+            _serviceMock.Setup(s => s.Status).Returns(ServiceControllerStatus.Stopped);
+            var stoppedService = new WindowsService(_serviceMock.Object);
 
-            Assert.AreEqual(ServiceControllerStatus.Stopped, stoppedService.CurrentStatus);
+            Assert.That(stoppedService.CurrentStatus, Is.EqualTo(ServiceControllerStatus.Stopped));
         }
 
         [Test]
-        public void Constructor_ParamCurrentStatus_IsStopped()
-        {
-            serviceMock.Setup(s => s.Status).Returns(ServiceControllerStatus.Stopped);
-            var stoppedService = new WindowsService(serviceMock.Object);
+        public void Constructor_ParamCurrentStatus_IsStopped() {
+            _serviceMock.Setup(s => s.Status).Returns(ServiceControllerStatus.Stopped);
+            var stoppedService = new WindowsService(_serviceMock.Object);
 
-            Assert.AreEqual(ServiceControllerStatus.Stopped, stoppedService.CurrentStatus);
+            Assert.That(stoppedService.CurrentStatus, Is.EqualTo(ServiceControllerStatus.Stopped));
         }
 
         [Test]
-        public void Constructor_ParamCurrentStatus_IsRunning()
-        {
-            serviceMock.Setup(s => s.Status).Returns(ServiceControllerStatus.Running);
-            var stoppedService = new WindowsService(serviceMock.Object);
+        public void Constructor_ParamCurrentStatus_IsRunning() {
+            _serviceMock.Setup(s => s.Status).Returns(ServiceControllerStatus.Running);
+            var stoppedService = new WindowsService(_serviceMock.Object);
 
-            Assert.AreEqual(ServiceControllerStatus.Running, stoppedService.CurrentStatus);
+            Assert.That(stoppedService.CurrentStatus, Is.EqualTo(ServiceControllerStatus.Running));
         }
 
         [Test]
-        public void HandleStatus_ServiceStatusFromStoppedToRunning_CurrentStatusHasChanged()
-        {
-            serviceMock.Setup(s => s.Status).Returns(ServiceControllerStatus.Stopped);
-            var stoppedService = new WindowsService(serviceMock.Object);
+        public void HandleStatus_ServiceStatusFromStoppedToRunning_CurrentStatusHasChanged() {
+            _serviceMock.Setup(s => s.Status).Returns(ServiceControllerStatus.Stopped);
+            var stoppedService = new WindowsService(_serviceMock.Object);
             var serviceStatusChanged = new List<string>();
 
             stoppedService.PropertyChanged += (sender, eventArgs) => serviceStatusChanged.Add(eventArgs.PropertyName);
@@ -82,14 +73,13 @@ namespace ServiceStarter.Models.Tests
             stoppedService.HandleStatus();
 
             Assert.Contains("CurrentStatus", serviceStatusChanged);
-            Assert.AreNotEqual(stoppedService.CurrentStatus, ServiceControllerStatus.Running);
+            Assert.That(stoppedService.CurrentStatus, Is.Not.EqualTo(ServiceControllerStatus.Running));
         }
 
         [Test]
-        public void HandleStatus_ServiceStatusFromRunningToStopped_CurrentStatusHasChanged()
-        {
-            serviceMock.Setup(s => s.Status).Returns(ServiceControllerStatus.Running);
-            var startedService = new WindowsService(serviceMock.Object);
+        public void HandleStatus_ServiceStatusFromRunningToStopped_CurrentStatusHasChanged() {
+            _serviceMock.Setup(s => s.Status).Returns(ServiceControllerStatus.Running);
+            var startedService = new WindowsService(_serviceMock.Object);
             var serviceStatusChanged = new List<string>();
 
             startedService.PropertyChanged += (sender, eventArgs) => serviceStatusChanged.Add(eventArgs.PropertyName);
@@ -97,7 +87,7 @@ namespace ServiceStarter.Models.Tests
             startedService.HandleStatus();
 
             Assert.Contains("CurrentStatus", serviceStatusChanged);
-            Assert.AreNotEqual(startedService.CurrentStatus, ServiceControllerStatus.Stopped);
+            Assert.That(startedService.CurrentStatus, Is.Not.EqualTo(ServiceControllerStatus.Stopped));
         }
     }
 }

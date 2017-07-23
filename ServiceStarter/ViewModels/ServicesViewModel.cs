@@ -2,39 +2,23 @@
 using ServiceStarter.Models;
 using System.Windows.Input;
 
-namespace ServiceStarter.ViewModels
-{
-    public class ServicesViewModel : IServicesViewModel
-    {
-        public ServicesViewModel()
-        {
+namespace ServiceStarter.ViewModels {
+    public class ServicesViewModel : IServicesViewModel {
+        public ServicesViewModel() {
             IWindowsServiceProvider serviceProvider = new WindowsServiceProvider();
-            Services = new ObservableCollection<IWindowsService>(serviceProvider.GetSQLServices());
+            Services = new ObservableCollection<IWindowsService>(serviceProvider.GetSqlServices());
         }
 
-        public ObservableCollection<IWindowsService> Services
-        {
-            get; private set;
-        }
+        public ObservableCollection<IWindowsService> Services { get; }
 
-        public IWindowsService SelectedService { get; set; }
+        public IWindowsService SelectedService { private get; set; }
 
-        private ICommand _StartStop;
-        public ICommand StartStop
-        {
-            get
-            {
-                if (_StartStop == null)
-                {
-                    _StartStop = new StartStopCommand<IWindowsService>(StartStopExecute);
-                }
+        private ICommand _startStop;
 
-                return _StartStop;
-            }
-        }
+        public ICommand StartStop => _startStop ??
+                                     (_startStop = new StartStopCommand<IWindowsService>(StartStopExecute));
 
-        private void StartStopExecute(object parameter)
-        {
+        private void StartStopExecute(object parameter) {
             SelectedService.HandleStatus();
         }
     }
